@@ -1,6 +1,6 @@
 package org.cn.zszhang.comm.sysutil.compile;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,8 +16,12 @@ public class ClassFinderTest {
 	@BeforeClass
 	public void beforeClass() {
 		cf = new ClassFinder();
-		List<String> classpath = Arrays.asList(System.getProperty(
-				"sun.boot.class.path").split(";"));
+		String[] bootcp = System.getProperty("sun.boot.class.path").split(";");
+		List<String> classpath = new ArrayList<String>();
+		for(int i=0; i< bootcp.length; i++) {
+			classpath.add(bootcp[i]);
+		}
+		classpath.add("G:/github/firewood/utils-parent/sysutil/target/classes");
 		cf.setClasspath(classpath);
 	}
 
@@ -28,11 +32,14 @@ public class ClassFinderTest {
 
 	@DataProvider(name = "dp_getClassFullName")
 	public Object[][] dp_getClassFullName() {
-		return new Object[][] { new Object[] { "", null },
+		return new Object[][] {
+				new Object[] { "", null },
 				new Object[] { null, null },
 				new Object[] { "Arrays", "java.util.Arrays" },
 				new Object[] { "ArrayList", "java.util.ArrayList" },
-				new Object[] { "Boolean", "java.lang.Boolean" }, };
+				new Object[] { "Boolean", "java.lang.Boolean" },
+				new Object[] { "ClassUtil",
+						"org.cn.zszhang.comm.sysutil.reflect.ClassUtil" }, };
 	}
 
 	@Test(dataProvider = "dp_getClassFullName")

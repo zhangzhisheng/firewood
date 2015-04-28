@@ -1,6 +1,7 @@
 package org.cn.zszhang.comm.sysutil.compile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -10,11 +11,15 @@ import java.util.Queue;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author zszhang
  *
  */
 public final class ClassFinder {
+	private final static Logger logger = LoggerFactory.getLogger(ClassFinder.class);
 	private final static String CLASS_SUFFIX = ".class";
 
 	private final List<File> _classpath = new ArrayList<File>(); // 内部使用
@@ -85,12 +90,15 @@ public final class ClassFinder {
 		try {
 			jar = new JarFile(jarFile);
 		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			logger.warn("打开jar文件失败，原因：" + e.getMessage());
+			return null;
+		} 
 
 		Enumeration<JarEntry> en = jar.entries();
-		if (null == en)
+		if (null == en) {
+			logger.warn("jar文件内容为空，返回null！");
 			return null;
+		}
 		while (en.hasMoreElements()) {
 			fullName = en.nextElement().getName();
 			if (fullName.matches(regex)) {
@@ -105,8 +113,7 @@ public final class ClassFinder {
 		try {
 			jar.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warn("关闭jar文件失败，原因：" + e.getMessage());
 		}
 
 		if (found)
