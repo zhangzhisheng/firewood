@@ -98,5 +98,6 @@
 		<module>pstutil</module>
 		<module>algoutil</module>
 		<module>sysutil</module>
+		<module>netutil</module>
 	</modules>
 </project>
