@@ -23,6 +23,7 @@ public class FtpClientAdapterApacheTest {
   @AfterClass
   public void afterClass() {
 	  ftp.disconnect();
+	  ftp = null;
   }
 
 
@@ -33,8 +34,8 @@ public class FtpClientAdapterApacheTest {
   }
 
   @Test(dependsOnMethods="rename")
-  public void listNames() {
-	  String[] files = ftp.listNames(null);
+  public void listFileNames() {
+	  String[] files = ftp.listFileNames(null);
 	  Assert.assertEquals(files[0], newFilename);
   }
 
@@ -48,7 +49,7 @@ public class FtpClientAdapterApacheTest {
     Assert.assertEquals(result, true);
   }
 
-  @Test(dependsOnMethods="rmdir")
+  @Test(enabled=true, dependsOnMethods="rmdir")
   public void logout() {
 	  boolean result = ftp.logout();
 	  Assert.assertEquals(result, true);
@@ -69,24 +70,24 @@ public class FtpClientAdapterApacheTest {
   }
 
   @Test(dependsOnMethods="cd")
-  public void put() {
-	  boolean actual = ftp.put(filename);
+  public void upload() {
+	  boolean actual = ftp.upload(filename);
 	  Assert.assertEquals(actual, true);
   }
 
-  @Test(dependsOnMethods="put")
+  @Test(dependsOnMethods="upload")
   public void rename() {
 	  boolean actual = ftp.rename("user.xlsx", newFilename);
 	  Assert.assertEquals(actual, true);
   }
 
-  @Test(dependsOnMethods="listNames")
-  public void get() {
-	  ftp.get(newFilename);
+  @Test(dependsOnMethods="listFileNames")
+  public void download() {
+	  ftp.download(newFilename);
 	  File file = new File(newFilename);
 	  Assert.assertEquals(file.exists(), true);
   }
-  @Test(dependsOnMethods="get")
+  @Test(dependsOnMethods="download")
   public void rm() {
 	  boolean actual = ftp.rm(newFilename);
 	  Assert.assertEquals(actual, true);

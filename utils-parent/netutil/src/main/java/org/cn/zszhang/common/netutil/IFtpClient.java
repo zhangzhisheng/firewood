@@ -67,7 +67,7 @@ public interface IFtpClient {
 	 * @param pathname 指定目录。 为null值或空串时，返回当前目录下的所有文件； 否则返回指定目录的文件； 如果指定目录为文件，返回文件。
 	 * @return 目录下的文件列表； null -- 无法获取到文件； 长度为0的数组 -- 获取到0个文件。
 	 */
-	public String[] listNames(String pathname);
+	public String[] listFileNames(String pathname);
 	
 	/** 
 	 * Login to the FTP server using the provided username and password. 
@@ -122,7 +122,7 @@ public interface IFtpClient {
 	 * @param remote 服务器文件名； 本地文件名使用服务器文件名。
 	 * @return null -- 如果没有获取到
 	 */
-	public void get(String remote);
+	public void download(String remote);
 	
 	/**
 	 * 从服务器下载文件到当前目录。
@@ -130,14 +130,14 @@ public interface IFtpClient {
 	 * @param local 本地文件名
 	 * @return null -- 如果没有获取到
 	 */
-	public void get(String remote, String local);
+	public void download(String remote, String local);
 
 	/** 
 	 * 向服务器传送一个文件
 	 * @param pathname 文件名
 	 * @return
 	 */
-	public boolean put(String pathname);
+	public boolean upload(String pathname);
 
 	/** 
 	 * 连接ftp服务器

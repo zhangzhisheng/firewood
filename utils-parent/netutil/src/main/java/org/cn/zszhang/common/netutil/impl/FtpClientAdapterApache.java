@@ -128,7 +128,7 @@ public class FtpClientAdapterApache implements IFtpClient {
 	 * 
 	 * @see org.cn.zszhang.common.netutil.IFtpClient#listNames(java.lang.String)
 	 */
-	public String[] listNames(String pathname) {
+	public String[] listFileNames(String pathname) {
 		if (null == pathname || pathname.isEmpty()) {
 			logger.debug("列出该目录下文件名："+pathname);
 			try {
@@ -280,7 +280,7 @@ public class FtpClientAdapterApache implements IFtpClient {
 	 * 
 	 * @see org.cn.zszhang.common.netutil.IFtpClient#put(java.lang.String)
 	 */
-	public boolean put(String pathname) {
+	public boolean upload(String pathname) {
 		if (null == pathname || pathname.isEmpty())
 			return true;
 		logger.debug("上传文件：" + pathname );
@@ -367,7 +367,7 @@ public class FtpClientAdapterApache implements IFtpClient {
 		logger.debug("释放连接资源");
 		if (_ftp.isConnected()) {
 			logout();
-			_ftp.disconnect();
+			disconnect();
 		}
 		super.finalize();
 	}
@@ -377,8 +377,8 @@ public class FtpClientAdapterApache implements IFtpClient {
 	 * 
 	 * @see org.cn.zszhang.common.netutil.IFtpClient#get(java.lang.String)
 	 */
-	public void get(String remote) {
-		get(remote, remote);
+	public void download(String remote) {
+		download(remote, remote);
 	}
 
 	/*
@@ -387,7 +387,7 @@ public class FtpClientAdapterApache implements IFtpClient {
 	 * @see org.cn.zszhang.common.netutil.IFtpClient#get(java.lang.String,
 	 * java.lang.String)
 	 */
-	public void get(String remote, String local) {
+	public void download(String remote, String local) {
 		if (null == remote || null == local || local.isEmpty()
 				|| remote.isEmpty())
 			return;
