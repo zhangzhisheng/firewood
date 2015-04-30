@@ -91,13 +91,6 @@ public interface IFtpClient {
 	public boolean rename(String from, String to);
 	
 	/**
-	 *  设置要传输的文件类型
-	 * @param fileType -- IFtpClient.ASCII_FILE / IFtpClient.BINARY_FILE
-	 * @return True if successfully completed, false if not.
-	 */
-	public boolean setFileType(int fileType);
-	
-	/**
 	 * 从服务器上获取断点重传的位置
 	 * @return     offset The offset into the remote file at which to start the next file transfer.
 	 */
@@ -115,15 +108,30 @@ public interface IFtpClient {
 	 * @param local 输出流
 	 * @return     True if successfully completed, false if not.
 	 */
-	public boolean get(String remote, OutputStream local);
+	public boolean retrieveFile(String remote, OutputStream local);
 	
 	/**
 	 * 从服务器读取文件内容，用于对文件内容进行分析。
 	 * @param remote
 	 * @return null -- 如果没有获取到
 	 */
-	public InputStream get(String remote);
+	public InputStream retrieveFile(String remote);
+
+	/**
+	 * 从服务器下载文件到当前目录。
+	 * @param remote 服务器文件名； 本地文件名使用服务器文件名。
+	 * @return null -- 如果没有获取到
+	 */
+	public void get(String remote);
 	
+	/**
+	 * 从服务器下载文件到当前目录。
+	 * @param remote 服务器文件名
+	 * @param local 本地文件名
+	 * @return null -- 如果没有获取到
+	 */
+	public void get(String remote, String local);
+
 	/** 
 	 * 向服务器传送一个文件
 	 * @param pathname 文件名
