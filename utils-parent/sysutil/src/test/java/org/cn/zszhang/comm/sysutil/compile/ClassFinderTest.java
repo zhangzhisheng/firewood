@@ -21,7 +21,7 @@ public class ClassFinderTest {
 		for(int i=0; i< bootcp.length; i++) {
 			classpath.add(bootcp[i]);
 		}
-		classpath.add("G:/github/firewood/utils-parent/sysutil/target/classes");
+		classpath.add("e:/github/firewood/utils-parent/sysutil/target/classes");
 		cf.setClasspath(classpath);
 	}
 

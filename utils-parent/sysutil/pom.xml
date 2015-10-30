@@ -17,14 +17,23 @@
 	</properties>
 	<build>
 		<plugins>
-			<!-- 解决maven test命令时console出现中文乱码乱码 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin><!-- 解决maven test命令时console出现中文乱码乱码 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.16</version>
 				<configuration>
 					<forkMode>once</forkMode>
-					<argLine>-Dfile.encoding=UTF-8</argLine>
+					<argLine>-Dfile.encoding=${project.reporting.outputEncoding}</argLine>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -127,8 +127,8 @@ public class CharacterUtil {
         if( null == input || input.isEmpty() ) return input;
 
         StringBuffer stringBuffer = new StringBuffer(input.length());
-        char[] ca = input.toCharArray();
-        for(char c : ca) advanceRegularize(c,stringBuffer);
+        for(int i=0; i<input.length();i++)
+            advanceRegularize(input.charAt(i), stringBuffer);
 
         return stringBuffer.toString();
     }
