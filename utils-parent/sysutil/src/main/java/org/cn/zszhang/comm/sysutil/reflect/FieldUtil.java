@@ -1,6 +1,8 @@
-package com.sinovate.ngrms.gcbscsvr.das.support.Utils;
+package org.cn.zszhang.comm.sysutil.reflect;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -62,32 +64,52 @@ public class FieldUtil {
 		field.setAccessible(true);
 		try {
 			field.set(bean, value);
-		} catch (IllegalAccessException e) {
-			LOGGER.warn("设置字段值时出现非法访问异常:" + field.getName());
-			LOGGER.warn("Cause:" + e.getCause());
+		} catch (IllegalArgumentException e) {
+            LOGGER.warn("设置字段值时出现数据类型不一致问题:" + field.getName(), e);
+        } catch (IllegalAccessException e) {
+			LOGGER.warn("设置字段值时出现非法访问异常:" + field.getName(), e);
 		}
 	}
 
-	private static void setValue(Object bean, Field field, final String type, final Object value) {
-		try {
-			if ("Long".equals(type))
-				field.set(bean, Long.valueOf((String) value));
-			else if( "String".equals(type))
-				field.set(bean,value);
-		} catch (Exception e) {
-			// donothing.
-		}
-	}
-	/**
-	 *  得到bean的field字段的值。
-	 */
+    public static void setFieldValueFromExcel(Object bean, Field field, final Object value) {
+        if( null == value ) return;
+        Class<?> type = field.getType();
+        String typeName = type.getSimpleName();
+        field.setAccessible(true);
+        try {
+            if( value instanceof String)
+                field.set(bean, value);
+            else if( !type.isPrimitive() )
+                field.set(bean, value.toString());
+            else if( "int".equals(typeName) )
+                field.set(bean,((Double)value).intValue());
+            else if( "short".equals(typeName) )
+                field.set(bean,((Double)value).shortValue());
+            else if( "long".equals(typeName) )
+                field.set(bean,((Double)value).longValue());
+            else if( "float".equals(typeName) )
+                field.set(bean,((Double)value).floatValue());
+            else if( "double".equals(typeName) )
+                field.set(bean,((Double)value).doubleValue());
+            else if( "boolean".equals(typeName) )
+                field.set(bean,((Boolean)value));
+            else {
+                LOGGER.warn("set field [" + field.getName() + "] fail....");
+            }
+        } catch (IllegalAccessException e) {
+            LOGGER.warn("设置字段值时出现非法访问异常:" + field.getName(), e);
+        }
+    }
+
+    /**
+     *  得到bean的field字段的值。
+     */
 	public static <T> Object getFieldValue(final Field field, final T bean) {
 		field.setAccessible(true);
 		try {
 			return field.get(bean);
 		} catch (IllegalAccessException e) {
-			LOGGER.warn("取字段值时出现非法访问异常:" + field.getName());
-			LOGGER.warn("错误信息:" + e.getMessage());
+			LOGGER.warn("取字段值时出现非法访问异常:" + field.getName(), e);
 			return null;
 		}
 	}
